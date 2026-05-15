@@ -1,0 +1,97 @@
+let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+function saveTasks() {
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+function addTask() {
+  const name = document.getElementById('taskName').value.trim();
+  const time = document.getElementById('taskTime').value;
+  const priority = document.getElementById('taskPriority').value;
+
+  if (!name) {
+    alert('Digite o nome da tarefa.');
+    return;
+  }
+
+  const task = {
+    id: Date.now(),
+    name,
+    time: time || 'Sem horário',
+    priority,
+    done: false
+  };
+
+  tasks.push(task);
+  tasks.sort((a, b) => a.time.localeCompare(b.time));
+
+  saveTasks();
+  renderTasks();
+
+  document.getElementById('taskName').value = '';
+  document.getElementById('taskTime').value = '';
+  document.getElementById('taskPriority').value = 'baixa';
+}
+
+function toggleTask(id) {
+  tasks = tasks.map(task => {
+    if (task.id === id) {
+      return { ...task, done: !task.done };
+    }
+
+    return task;
+  });
+
+  saveTasks();
+  renderTasks();
+}
+
+function deleteTask(id) {
+  tasks = tasks.filter(task => task.id !== id);
+
+  saveTasks();
+  renderTasks();
+}
+
+function renderTasks() {
+  const taskList = document.getElementById('taskList');
+
+  taskList.innerHTML = '';
+
+  if (tasks.length === 0) {
+    taskList.innerHTML = '<p class="empty">Nenhuma tarefa cadastrada ainda.</p>';
+    return;
+  }
+
+  tasks.forEach(task => {
+    const div = document.createElement('div');
+
+    div.className = `task ${task.done ? 'done' : ''}`;
+
+    div.innerHTML = `
+      <div class="task-info">
+        <div class="task-title">${task.name}</div>
+        <div class="task-meta">
+          ${task.time} · 
+          <span class="priority ${task.priority}">
+            ${task.priority}
+          </span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="small-btn" onclick="toggleTask(${task.id})">
+          ${task.done ? 'Voltar' : 'Feito'}
+        </button>
+
+        <button class="small-btn delete" onclick="deleteTask(${task.id})">
+          Excluir
+        </button>
+      </div>
+    `;
+
+    taskList.appendChild(div);
+  });
+}
+
+renderTasks();
