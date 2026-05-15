@@ -16,13 +16,11 @@ function addTask() {
 
   if (time) {
     const now = new Date();
-
     const currentTime = now.toTimeString().slice(0, 5);
 
-    if (time < currentTime) {
-        alert('Esse horário já passou. Escolha um horário futuro.');
-
-        return;
+    if (time <= currentTime) {
+      alert('Esse horário já passou. Escolha um horário futuro.');
+      return;
     }
   }
 
@@ -65,10 +63,24 @@ function deleteTask(id) {
   renderTasks();
 }
 
+function updateDashboard() {
+  const total = tasks.length;
+  const done = tasks.filter(task => task.done).length;
+  const pending = tasks.filter(task => !task.done).length;
+  const high = tasks.filter(task => task.priority === 'alta').length;
+
+  document.getElementById('totalTasks').innerText = total;
+  document.getElementById('doneTasks').innerText = done;
+  document.getElementById('pendingTasks').innerText = pending;
+  document.getElementById('highTasks').innerText = high;
+}
+
 function renderTasks() {
   const taskList = document.getElementById('taskList');
 
   taskList.innerHTML = '';
+
+  updateDashboard();
 
   if (tasks.length === 0) {
     taskList.innerHTML = '<p class="empty">Nenhuma tarefa cadastrada ainda.</p>';
@@ -106,8 +118,6 @@ function renderTasks() {
   });
 }
 
-renderTasks();
-
 function loadTheme() {
   const savedTheme = localStorage.getItem('theme') || 'dark';
 
@@ -130,4 +140,5 @@ function toggleTheme() {
   loadTheme();
 }
 
+renderTasks();
 loadTheme();
