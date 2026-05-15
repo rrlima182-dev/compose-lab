@@ -1,12 +1,39 @@
 services:
+
   nginx:
     image: nginx:latest
     container_name: meu-nginx
-
     ports:
       - "8080:80"
-
     volumes:
       - ./html:/usr/share/nginx/html
-
     restart: always
+
+  backend:
+    image: python:3.11
+    container_name: meu-backend
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+    ports:
+      - "5000:5000"
+    command: bash -c "pip install -r requirements.txt && python app.py"
+    restart: always
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:16
+    container_name: meu-postgres
+    environment:
+      POSTGRES_DB: meubanco
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 30xteleH@s88
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  postgres_data:

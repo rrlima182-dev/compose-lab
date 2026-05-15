@@ -387,16 +387,40 @@ body.dark-mode .stat-card p {
 .task.done,
 body.light-mode .task.done,
 body.dark-mode .task.done {
-  opacity: 1 !important;
-  text-decoration: none !important;
-  background: #dcfce7 !important;
-  border: 2px solid #22c55e !important;
+
+  opacity: 0.45 !important;
+
+  background: #f1f5f9 !important;
+
+  border: 1px solid #cbd5e1 !important;
+
+  transform: scale(0.98);
 }
 
 .task.done .task-title,
 .task.done .task-meta,
 .task.done .priority {
-  opacity: 1 !important;
-  color: #166534 !important;
-  font-weight: bold;
+
+  color: #64748b !important;
+
+  font-weight: normal;
+
+}
+
+.task:not(.done) {
+
+  border: 2px solid #22c55e;
+
+  background: #f0fdf4;
+
+  box-shadow: 0 6px 16px rgba(34, 197, 94, 0.08);
+
+  opacity: 1;
+}
+
+body.dark-mode .task:not(.done) {
+
+  background: #052e16;
+
+  border: 2px solid #22c55e;
 }

@@ -1,10 +1,15 @@
-let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+const API_URL = 'http://localhost:5000/tasks';
 
-function saveTasks() {
-  localStorage.setItem('tasks', JSON.stringify(tasks));
+let tasks = [];
+
+async function loadTasks() {
+  const response = await fetch(API_URL);
+  tasks = await response.json();
+
+  renderTasks();
 }
 
-function addTask() {
+async function addTask() {
   const name = document.getElementById('taskName').value.trim();
   const time = document.getElementById('taskTime').value;
   const priority = document.getElementById('taskPriority').value;
@@ -24,43 +29,39 @@ function addTask() {
     }
   }
 
-  const task = {
-    id: Date.now(),
-    name,
-    time: time || 'Sem horário',
-    priority,
-    done: false
-  };
+  await fetch(API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      name,
+      time,
+      priority
+    })
+  });
 
-  tasks.push(task);
-  tasks.sort((a, b) => a.time.localeCompare(b.time));
-
-  saveTasks();
-  renderTasks();
+  await loadTasks();
 
   document.getElementById('taskName').value = '';
   document.getElementById('taskTime').value = '';
   document.getElementById('taskPriority').value = 'baixa';
 }
 
-function toggleTask(id) {
-  tasks = tasks.map(task => {
-    if (task.id === id) {
-      return { ...task, done: !task.done };
-    }
-
-    return task;
+async function toggleTask(id) {
+  await fetch(`${API_URL}/${id}`, {
+    method: 'PUT'
   });
 
-  saveTasks();
-  renderTasks();
+  await loadTasks();
 }
 
-function deleteTask(id) {
-  tasks = tasks.filter(task => task.id !== id);
+async function deleteTask(id) {
+  await fetch(`${API_URL}/${id}`, {
+    method: 'DELETE'
+  });
 
-  saveTasks();
-  renderTasks();
+  await loadTasks();
 }
 
 function updateDashboard() {
@@ -96,7 +97,7 @@ function renderTasks() {
       <div class="task-info">
         <div class="task-title">${task.name}</div>
         <div class="task-meta">
-          ${task.time} · 
+          ${task.task_time || 'Sem horário'} · 
           <span class="priority ${task.priority}">
             ${task.priority}
           </span>
@@ -140,5 +141,5 @@ function toggleTheme() {
   loadTheme();
 }
 
-renderTasks();
+loadTasks();
 loadTheme();
