@@ -95,3 +95,27 @@ function renderTasks() {
 }
 
 renderTasks();
+
+function loadTheme() {
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+
+  document.body.classList.remove('light-mode', 'dark-mode');
+  document.body.classList.add(`${savedTheme}-mode`);
+
+  const button = document.getElementById('themeButton');
+
+  if (button) {
+    button.innerHTML = savedTheme === 'dark' ? '☀️' : '🌙';
+  }
+}
+
+function toggleTheme() {
+  const isDark = document.body.classList.contains('dark-mode');
+  const newTheme = isDark ? 'light' : 'dark';
+
+  localStorage.setItem('theme', newTheme);
+
+  loadTheme();
+}
+
+loadTheme();

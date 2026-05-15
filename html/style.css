@@ -211,3 +211,60 @@ button:hover {
     width: 100%;
   }
 }
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.theme-btn {
+  width: auto;
+  margin: 0;
+  padding: 9px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: white;
+  cursor: pointer;
+}
+
+body.light-mode {
+  background: linear-gradient(135deg, #f8fafc, #dbeafe);
+  color: #222;
+}
+
+body.light-mode .card {
+  background: rgba(255, 255, 255, 0.96);
+}
+
+body.light-mode .task {
+  background: #f8fafc;
+}
+
+body.dark-mode {
+  background: linear-gradient(135deg, #020617, #0f172a);
+  color: white;
+}
+
+body.dark-mode .card {
+  background: rgba(30, 41, 59, 0.96);
+  color: white;
+}
+
+body.dark-mode input,
+body.dark-mode select {
+  background: #0f172a;
+  color: white;
+  border-color: #334155;
+}
+
+body.dark-mode .task {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+body.dark-mode .task-meta,
+body.dark-mode .empty {
+  color: #cbd5e1;
+}
