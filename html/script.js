@@ -14,6 +14,18 @@ function addTask() {
     return;
   }
 
+  if (time) {
+    const now = new Date();
+
+    const currentTime = now.toTimeString().slice(0, 5);
+
+    if (time < currentTime) {
+        alert('Esse horário já passou. Escolha um horário futuro.');
+
+        return;
+    }
+  }
+
   const task = {
     id: Date.now(),
     name,
